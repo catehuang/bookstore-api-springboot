@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
+@Table(name = "book")
 public class Book implements Serializable {
 
     private static final long SERIAL_VERSION_UID = 1L;
@@ -15,7 +16,7 @@ public class Book implements Serializable {
     private String author;
     private String image;
     private double stars;
-    private String[] reviews;
+    private int reviews;
     @Column(length = 65555)
     private String description;
     private double price;
@@ -25,7 +26,7 @@ public class Book implements Serializable {
     }
 
     public Book(long id, String name, String author, String image, double stars,
-                String[] reviews, String description, double price, int quantity) {
+                int reviews, String description, double price, int quantity) {
         this.id = id;
         this.name = name;
         this.author = author;
@@ -37,8 +38,7 @@ public class Book implements Serializable {
         this.quantity = quantity;
     }
 
-    public Book(String name, String author, String image, double stars, String[] reviews,
-                String description, double price, int quantity) {
+    public Book(String name, String author, String image, double stars, int reviews, String description, double price, int quantity) {
         this.name = name;
         this.author = author;
         this.image = image;
@@ -89,11 +89,11 @@ public class Book implements Serializable {
         this.stars = stars;
     }
 
-    public String[] getReviews() {
+    public int getReviews() {
         return reviews;
     }
 
-    public void setReviews(String[] reviews) {
+    public void setReviews(int reviews) {
         this.reviews = reviews;
     }
 
@@ -120,4 +120,5 @@ public class Book implements Serializable {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+
 }

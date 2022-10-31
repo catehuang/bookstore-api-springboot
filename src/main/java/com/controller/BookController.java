@@ -15,7 +15,7 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
-    @GetMapping("/")
+    @GetMapping("")
     public List<Book> getAllBooks() {
         return bookService.getAllBooks();
     }
@@ -25,7 +25,7 @@ public class BookController {
         return bookService.getBook(Long.parseLong(id));
     }
 
-    @PostMapping("/")
+    @PostMapping("")
     public void addBook(@RequestBody Book book) {
         bookService.addBook(book);
     }
