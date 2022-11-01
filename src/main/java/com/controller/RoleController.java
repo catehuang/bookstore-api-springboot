@@ -9,23 +9,23 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/roles/")
+@RequestMapping("/api/roles")
 public class RoleController {
 
     @Autowired
     private RoleService roleService;
 
-    @GetMapping("")
+    @GetMapping("/all")
     public List<Role> getAllRoles() {
         return roleService.getAllRoles();
     }
 
     @GetMapping("/{id}")
-    public Optional<Role> getRole(@PathVariable String id) {
+    public Role getRole(@PathVariable String id) {
         return roleService.getRole(Long.parseLong(id));
     }
 
-    @PostMapping("")
+    @PostMapping("/new")
     public void addRole(@RequestBody Role role) {
         roleService.addRole(role);
     }

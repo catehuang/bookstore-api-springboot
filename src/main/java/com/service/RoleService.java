@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class RoleService {
@@ -17,8 +16,8 @@ public class RoleService {
         return roleRepository.findAll();
     }
 
-    public Optional<Role> getRole(long id) {
-        return roleRepository.findById(id);
+    public Role getRole(long id) {
+        return roleRepository.findById(id).orElse(null);
     }
 
     public void addRole(Role role) {
