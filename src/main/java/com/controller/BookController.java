@@ -15,17 +15,17 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
-    @GetMapping("")
+    @GetMapping("/all")
     public List<Book> getAllBooks() {
         return bookService.getAllBooks();
     }
 
     @GetMapping("/{id}")
-    public Optional<Book> getBook(@PathVariable String id) {
+    public Book getBook(@PathVariable String id) {
         return bookService.getBook(Long.parseLong(id));
     }
 
-    @PostMapping("")
+    @PostMapping("/new")
     public void addBook(@RequestBody Book book) {
         bookService.addBook(book);
     }
