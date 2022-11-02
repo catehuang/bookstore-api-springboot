@@ -39,7 +39,8 @@ public class Book implements Serializable {
         this.quantity = quantity;
     }
 
-    public Book(String name, String author, String image, double stars, int reviews, String description, double price, int quantity) {
+    public Book(String name, String author, String image, double stars, int reviews, String description,
+                double price, int quantity) {
         this.name = name;
         this.author = author;
         this.image = image;

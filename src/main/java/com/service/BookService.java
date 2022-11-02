@@ -31,6 +31,12 @@ public class BookService {
     }
 
     public void deleteBook(long id) {
-        bookRepository.deleteById(id);
+        try {
+            bookRepository.deleteById(id);
+        }
+        catch (Exception e) {
+            System.out.println(e.getStackTrace());
+        }
+
     }
 }

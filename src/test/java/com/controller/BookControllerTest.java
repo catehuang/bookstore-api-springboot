@@ -119,12 +119,12 @@ public class BookControllerTest {
 
     @Test
     public void deleteBook() throws Exception {
-        uri += "/1";
+        uri += "/3";
         MvcResult mvcResult1 = this.mockMvc
                 .perform(delete(uri))
                 .andReturn();
 
         assertEquals(200, mvcResult1.getResponse().getStatus());
-        assertTrue(bookRepository.findById(1L).stream().findAny().isEmpty());
+        assertTrue(bookRepository.findById(3L).stream().findAny().isEmpty());
     }
 }
