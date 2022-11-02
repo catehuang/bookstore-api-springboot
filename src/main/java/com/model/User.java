@@ -2,6 +2,7 @@ package com.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -14,10 +15,10 @@ public class User implements Serializable {
     @Column(name = "id")
     private long id;
 
-    @Column(name = "username")
+    @Column(name = "username", unique = true)
     private String username;
 
-    @Column(name = "email", unique = true)
+    @Column(name = "email")
     private String email;
 
     @Column(name = "password")
@@ -102,12 +103,16 @@ public class User implements Serializable {
         this.role = role;
     }
 
-//    public Set<Order> getOrderSet() {
-//        return orderSet;
-//    }
-//
-//    public void setOrderSet(Set<Order> orderSet) {
-//        this.orderSet = orderSet;
-//    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id == user.id && Objects.equals(username, user.username);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, username);
+    }
 }

@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -46,6 +45,11 @@ public class UserController {
     }
     @DeleteMapping("/users/{id}")
     public void deleteUser(@PathVariable String id) {
-        userService.deleteUser(Long.parseLong(id));
+        try {
+            userService.deleteUser(Long.parseLong(id));
+        }
+        catch (Exception e) {
+            System.out.println(e.getStackTrace());
+        }
     }
 }
