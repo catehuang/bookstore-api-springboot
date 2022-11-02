@@ -3,6 +3,7 @@ package com.model;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "cart")
@@ -14,11 +15,11 @@ public class Cart implements Serializable {
     @Column(name = "id")
     private long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "owner_id", referencedColumnName = "id") //insert a foreign key owner_id corresponding to owner's id
-    private User owner;
+    @OneToOne
+    @JoinColumn(name = "user_id", unique = true) //insert a foreign key user_id corresponding to user's id
+    private User user;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "book_set",
             joinColumns = @JoinColumn(name = "cart_id"),
@@ -29,19 +30,23 @@ public class Cart implements Serializable {
     public Cart() {
     }
 
-    public Cart(long id, User owner, List<Book> bookList) {
+    public Cart(long id, User user, List<Book> bookList) {
         this.id = id;
-        this.owner = owner;
+        this.user = user;
         this.bookList = bookList;
     }
 
-    public Cart(User owner, List<Book> bookList) {
-        this.owner = owner;
+    public Cart(User user, List<Book> bookList) {
+        this.user = user;
         this.bookList = bookList;
     }
 
     public Cart(List<Book> bookList) {
         this.bookList = bookList;
+    }
+
+    public Cart(User user) {
+        this.user = user;
     }
 
     public long getId() {
@@ -52,12 +57,12 @@ public class Cart implements Serializable {
         this.id = id;
     }
 
-    public User getOwner() {
-        return owner;
+    public User getUser() {
+        return user;
     }
 
-    public void setOwner(User owner) {
-        this.owner = owner;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public List<Book> getBookList() {
@@ -66,5 +71,18 @@ public class Cart implements Serializable {
 
     public void setBookList(List<Book> bookList) {
         this.bookList = bookList;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Cart cart = (Cart) o;
+        return id == cart.id && Objects.equals(user, cart.user);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

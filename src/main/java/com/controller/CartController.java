@@ -1,6 +1,7 @@
 package com.controller;
 
 import com.model.Cart;
+import com.model.User;
 import com.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,24 +16,31 @@ public class CartController {
     @Autowired
     private CartService cartService;
 
-    @GetMapping("")
+    @GetMapping("/all")
     public List<Cart> getAllCarts() {
         return cartService.getAllCarts();
     }
 
-    @GetMapping("/{id}")
-    public Optional<Cart> getCart(@PathVariable String id) {
-        return cartService.getCart(Long.parseLong(id));
+    @GetMapping("/find/{userId}")
+    public Cart getCartByUserId(@PathVariable String userId) {
+        return cartService.getCartByUserId(Long.parseLong(userId)).orElse(null);
     }
 
-    @PostMapping("")
-    public void addCart(@RequestBody Cart cart) {
-        cartService.addCart(cart);
+    @GetMapping("/{cartId}")
+    public Cart getCart(@PathVariable String cartId) {
+        return cartService.getCart(Long.parseLong(cartId)).orElse(null);
+    }
+
+    @PostMapping("/new")
+    public Cart addCartByUser(@RequestBody User user) {
+        Cart cart = new Cart();
+        cart.setUser(user);
+        return cartService.addCart(cart);
     }
 
     @PutMapping("/{id}")
-    public void updateCart(@RequestBody Cart cart, @PathVariable String id) {
-        cartService.update(Long.parseLong(id), cart);
+    public Cart updateCart(@RequestBody Cart cart, @PathVariable String id) {
+        return cartService.update(Long.parseLong(id), cart);
     }
     @DeleteMapping("/{id}")
     public void deleteCart(@PathVariable String id) {
