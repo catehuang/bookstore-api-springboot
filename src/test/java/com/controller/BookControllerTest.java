@@ -27,7 +27,7 @@ public class BookControllerTest {
     @Autowired
     private MockMvc mockMvc;
     private MvcResult mvcResult;
-    private String uri = "/api/books";
+    private final String URI = "/api/books";
 
 //    private String mapToJson(Object obj) throws JsonProcessingException {
 //        ObjectMapper objectMapper = new ObjectMapper();
@@ -41,9 +41,8 @@ public class BookControllerTest {
 
     @Test
     public void getAllBooks() throws Exception {
-        uri += "/all";
         MvcResult mvcResult1 = this.mockMvc
-                .perform(get(uri)
+                .perform(get(URI + "/all")
                         .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
 
@@ -55,19 +54,19 @@ public class BookControllerTest {
     @Test
     public void getBook() throws Exception {
         MvcResult mvcResult1 = this.mockMvc
-                .perform(get(uri + "/1")
+                .perform(get(URI + "/1")
                         .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
 
         assertEquals(200, mvcResult1.getResponse().getStatus());
         Book book = objectMapper.readValue(mvcResult1.getResponse().getContentAsString(), Book.class);
-        assertEquals(bookRepository.findById(1L).get(), book);
+        assertEquals(bookRepository.findById(1L).orElse(null), book);
 
 
         long nextIndex = bookRepository.findAll().size() + 1;
         assertTrue(bookRepository.findById(nextIndex).isEmpty());
         mvcResult1 = this.mockMvc
-                .perform(get(uri + "/" + nextIndex)
+                .perform(get(URI + "/" + nextIndex)
                         .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
         assertEquals(200, mvcResult1.getResponse().getStatus());
@@ -79,7 +78,7 @@ public class BookControllerTest {
         Book book = new Book("Test Book", "Book Author", "Book Image", 3.3, 1234,
                 "Book Description", 14.56, 22);
         MvcResult mvcResult1 = this.mockMvc
-                .perform(post(uri + "/new")
+                .perform(post(URI + "/new")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(book)))
                 .andReturn();
@@ -90,12 +89,11 @@ public class BookControllerTest {
 
     @Test
     public void updateBook() throws Exception {
-        uri += "/1";
         Book book = new Book("Test Book", "Book Author", "Book Image", 3.3, 1234,
                 "Book Description", 14.56, 22);
 
         MvcResult mvcResult1 = this.mockMvc
-                .perform(put(uri)
+                .perform(put(URI + "/1")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(book)))
                 .andReturn();
@@ -115,9 +113,8 @@ public class BookControllerTest {
 
     @Test
     public void deleteBook() throws Exception {
-        uri += "/3";
         MvcResult mvcResult1 = this.mockMvc
-                .perform(delete(uri))
+                .perform(delete(URI + "/3"))
                 .andReturn();
 
         assertEquals(200, mvcResult1.getResponse().getStatus());

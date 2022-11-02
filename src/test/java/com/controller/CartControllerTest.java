@@ -35,13 +35,12 @@ class CartControllerTest {
     @Autowired
     private MockMvc mockMvc;
     private MvcResult mvcResult;
-    private String uri = "/api/carts";
+    private final String URI = "/api/carts";
 
     @Test
     public void getAllCarts() throws Exception {
-        uri += "/all";
         MvcResult mvcResult1 = this.mockMvc
-                .perform(get(uri)
+                .perform(get(URI + "/all")
                         .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
 
@@ -52,9 +51,8 @@ class CartControllerTest {
 
     @Test
     public void getCart() throws Exception {
-        uri += "/1";
         MvcResult mvcResult1 = this.mockMvc
-                .perform(get(uri)
+                .perform(get(URI + "/1")
                         .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
 
@@ -65,9 +63,8 @@ class CartControllerTest {
 
     @Test
     public void getCartByUserId() throws Exception {
-        uri += "/find";
         MvcResult mvcResult1 = this.mockMvc
-                .perform(get(uri + "/1")
+                .perform(get(URI + "/find/1")
                         .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
 
@@ -76,7 +73,7 @@ class CartControllerTest {
         assertTrue(cartRepository.findByUserId(1L).get().getId() == cart.getId());
 
         mvcResult1 = this.mockMvc
-                .perform(get(uri + "/2")
+                .perform(get(URI + "/find/2")
                         .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
 
@@ -87,13 +84,11 @@ class CartControllerTest {
 
     @Test
     public void addCartByUser_1() throws Exception {
-        uri += "/new";
-
         // Test case: cart and user is one-to-one
         User user = userRepository.findById(1L).get();
 
         MvcResult mvcResult1 = this.mockMvc
-                .perform(post(uri)
+                .perform(post(URI + "/new")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(user)))
                 .andReturn();
@@ -104,12 +99,11 @@ class CartControllerTest {
     @Test
     public void addCartByUser_2() throws Exception {
         // Test case: add a new cart
-        uri += "/new";
         User user = userRepository.findById(2L).get();
         assertTrue(cartRepository.findByUserId(2L).isEmpty());
 
         MvcResult mvcResult1 = this.mockMvc
-                .perform(post(uri)
+                .perform(post(URI + "/new")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(user)))
                 .andReturn();
@@ -120,7 +114,6 @@ class CartControllerTest {
 
     @Test
     public void updateCart() throws Exception {
-        uri += "/1";
         Book book = bookRepository.findById(2L).get();
         Set<Book> books = new HashSet<>();
         books.add(bookRepository.findById(2L).get());
@@ -128,7 +121,7 @@ class CartControllerTest {
         Cart cart = new Cart(user, books);
 
         MvcResult mvcResult1 = this.mockMvc
-                .perform(put(uri)
+                .perform(put(URI + "/1")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(cart)))
                 .andReturn();
@@ -140,9 +133,8 @@ class CartControllerTest {
 
     @Test
     public void deleteCart() throws Exception {
-        uri += "/1";
         MvcResult mvcResult1 = this.mockMvc
-                .perform(delete(uri))
+                .perform(delete(URI + "/1"))
                 .andReturn();
 
         assertEquals(200, mvcResult1.getResponse().getStatus());

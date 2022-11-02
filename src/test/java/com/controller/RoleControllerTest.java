@@ -24,13 +24,12 @@ class RoleControllerTest {
     @Autowired
     private MockMvc mockMvc;
     private MvcResult mvcResult;
-    private String uri = "/api/roles";
+    private final String URI= "/api/roles";
     
     @Test
     public void getAllRoles() throws Exception {
-        uri += "/all";
         MvcResult mvcResult1 = this.mockMvc
-                .perform(get(uri)
+                .perform(get(URI + "/all")
                         .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
 
@@ -41,9 +40,8 @@ class RoleControllerTest {
 
     @Test
     public void getRole() throws Exception {
-        uri += "/1";
         MvcResult mvcResult1 = this.mockMvc
-                .perform(get(uri)
+                .perform(get(URI + "/1")
                         .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
 
@@ -54,10 +52,9 @@ class RoleControllerTest {
 
     @Test
     public void addRole() throws Exception {
-        uri += "/new";
         Role role = new Role("guest");
         MvcResult mvcResult1 = this.mockMvc
-                .perform(post(uri)
+                .perform(post(URI + "/new")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(role)))
                 .andReturn();
@@ -68,11 +65,10 @@ class RoleControllerTest {
 
     @Test
     public void updateRole() throws Exception {
-        uri += "/1";
         Role role = new Role("visitor");
 
         MvcResult mvcResult1 = this.mockMvc
-                .perform(put(uri)
+                .perform(put(URI + "/1")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(role)))
                 .andReturn();
@@ -90,7 +86,7 @@ class RoleControllerTest {
         assertTrue(roleRepository.findByName("guest").isPresent());
 
         MvcResult mvcResult1 = this.mockMvc
-                .perform(delete(uri + "/3"))
+                .perform(delete(URI + "/3"))
                 .andReturn();
 
         assertEquals(200, mvcResult1.getResponse().getStatus());
