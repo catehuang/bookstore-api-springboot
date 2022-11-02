@@ -17,7 +17,7 @@ public class Role implements Serializable {
     @Column(name = "id")
     private long id;
 
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
     private String name;
 
     public Role() {
@@ -53,7 +53,7 @@ public class Role implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Role role = (Role) o;
-        return id == role.id && Objects.equals(name, role.name);
+        return id == role.id && name.equals(role.name);
     }
 
     @Override

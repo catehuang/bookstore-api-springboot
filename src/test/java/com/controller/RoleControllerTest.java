@@ -89,12 +89,13 @@ class RoleControllerTest {
 
     @Test
     public void deleteRole() throws Exception {
-        uri += "/1";
+        assertTrue(roleRepository.findByName("guest").isPresent());
+
         MvcResult mvcResult1 = this.mockMvc
-                .perform(delete(uri))
+                .perform(delete(uri + "/3"))
                 .andReturn();
 
         assertEquals(200, mvcResult1.getResponse().getStatus());
-        assertTrue(roleRepository.findById(1L).stream().findAny().isEmpty());
+        assertTrue(roleRepository.findById(3L).stream().findAny().isEmpty());
     }
 }

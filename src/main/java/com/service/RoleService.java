@@ -30,6 +30,12 @@ public class RoleService {
     }
 
     public void deleteRole(long id) {
-        roleRepository.deleteById(id);
+        try {
+            roleRepository.deleteById(id);
+        }
+        catch(Exception e) {
+            System.out.println(e.getStackTrace());
+        }
+
     }
 }
