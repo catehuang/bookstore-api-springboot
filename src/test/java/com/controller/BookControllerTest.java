@@ -2,10 +2,7 @@ package com.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.model.Book;
-import com.model.User;
 import com.repository.BookRepository;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -14,9 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -43,15 +38,6 @@ public class BookControllerTest {
 //        ObjectMapper objectMapper = new ObjectMapper();
 //        return objectMapper.readValue(json, clazz);
 //    }
-
-    @BeforeEach
-    public void setUp() {
-        mvcResult = null;
-    }
-
-    @AfterEach
-    public void tearDown() {
-    }
 
     @Test
     public void getAllBooks() throws Exception {

@@ -6,7 +6,8 @@ import com.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Optional;
 
 @Service
@@ -16,17 +17,17 @@ public class UserService {
     @Autowired
     private RoleRepository roleRepository;
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public Set<User> getAllUsers() {
+        return new HashSet<User>(userRepository.findAll());
     }
 
-    public Optional<User> getUser(long id) {
-        return userRepository.findById(id);
+    public User getUser(long id) {
+        return userRepository.findById(id).orElse(null);
     }
 
-    public void addUser(User user) {
-        user.setRole(roleRepository.findByName("user"));
-        userRepository.save(user);
+    public User addUser(User user) {
+        user.setRole(roleRepository.findByName("user").get());
+        return userRepository.save(user);
     }
 
     public void update(long id, User user) {

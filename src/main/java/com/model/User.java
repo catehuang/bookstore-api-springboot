@@ -2,7 +2,7 @@ package com.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "user")
@@ -23,15 +23,15 @@ public class User implements Serializable {
     @Column(name = "password")
     private String password;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "role_id", referencedColumnName = "id") //insert FK role_id referencing Role's id
+    @ManyToOne
+    @JoinColumn(name = "role_id")
     private Role role;
 
-    @OneToOne(mappedBy = "owner")
+    @OneToOne(mappedBy = "user")
     private Cart cart;
 
-    @OneToMany (mappedBy = "owner")
-    private List<Order> orderList;
+    @OneToMany (mappedBy = "user")
+    private Set<Order> orderSet;
 
     public User() {
     }
@@ -53,6 +53,13 @@ public class User implements Serializable {
     public User(String username, String password) {
         this.username = username;
         this.password = password;
+    }
+
+    public User(String username, String email, String password, Role role) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.role = role;
     }
 
     public long getId() {
@@ -95,12 +102,12 @@ public class User implements Serializable {
         this.role = role;
     }
 
-//    public List<Order> getOrderList() {
-//        return orderList;
+//    public Set<Order> getOrderSet() {
+//        return orderSet;
 //    }
 //
-//    public void setOrderList(List<Order> orderList) {
-//        this.orderList = orderList;
+//    public void setOrderSet(Set<Order> orderSet) {
+//        this.orderSet = orderSet;
 //    }
 
 }

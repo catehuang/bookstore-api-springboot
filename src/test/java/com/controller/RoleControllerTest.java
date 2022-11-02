@@ -10,13 +10,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-
-import java.util.Objects;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -54,7 +49,7 @@ class RoleControllerTest {
 
         assertEquals(200, mvcResult1.getResponse().getStatus());
         Role role = objectMapper.readValue(mvcResult1.getResponse().getContentAsString(), Role.class);
-        assertEquals(roleRepository.findById(1L).get(), role);
+        assertEquals(roleRepository.findById(1L).orElse(null), role);
     }
 
     @Test
@@ -83,8 +78,11 @@ class RoleControllerTest {
                 .andReturn();
 
         assertEquals(200, mvcResult1.getResponse().getStatus());
-        Role updatedRole = roleRepository.findById(1L).get();
-        assertTrue(Objects.equals(updatedRole.getName(), role.getName()));
+        Role updatedRole = roleRepository.findById(1L).orElse(null);
+        if (updatedRole == null) {
+            throw new IllegalArgumentException("updated role is empty");
+        }
+        assertEquals(updatedRole.getName(), role.getName());
     }
 
     @Test

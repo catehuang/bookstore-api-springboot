@@ -83,7 +83,7 @@ class OrderControllerTest {
 
         assertEquals(200, mvcResult1.getResponse().getStatus());
         Order[] order = objectMapper.readValue(mvcResult1.getResponse().getContentAsString(), Order[].class);
-        assertEquals(orderRepository.findAllByUserId(1).stream().count(), order.length);
+        assertEquals((long) orderRepository.findAllByUserId(1).size(), order.length);
 
         long nextIndex = userRepository.findAll().size() + 1;
         assertTrue(orderRepository.findById(nextIndex).isEmpty()); //check there's no order with id = 5L
@@ -156,7 +156,10 @@ class OrderControllerTest {
                 .andReturn();
 
         assertEquals(200, mvcResult1.getResponse().getStatus());
-        Order updatedOrder = orderRepository.findById(1L).get();
+        Order updatedOrder = orderRepository.findById(1L).orElse(null);
+        if (updatedOrder == null) {
+            throw new IllegalArgumentException("updated order is empty");
+        }
         assertTrue(Objects.equals(updatedOrder.getAddress(), order.getAddress()) &&
                 Objects.equals(updatedOrder.getPaymentStatus(), order.getPaymentStatus()) &&
                 Objects.equals(updatedOrder.getAmount(), order.getAmount()) &&

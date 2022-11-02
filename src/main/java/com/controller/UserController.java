@@ -5,7 +5,7 @@ import com.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Set;
 import java.util.Optional;
 
 @RestController
@@ -15,13 +15,13 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/users")
-    public List<User> getAllUsers() {
+    @GetMapping("/users/all")
+    public Set<User> getAllUsers() {
         return userService.getAllUsers();
     }
 
     @GetMapping("/users/{id}")
-    public Optional<User> getUser(@PathVariable String id) {
+    public User getUser(@PathVariable String id) {
         return userService.getUser(Long.parseLong(id));
     }
 
@@ -36,8 +36,8 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public void addUser(@RequestBody User user) {
-        userService.addUser(user);
+    public User addUser(@RequestBody User user) {
+        return userService.addUser(user);
     }
 
     @PutMapping("/users/{id}")
