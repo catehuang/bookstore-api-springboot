@@ -2,6 +2,7 @@ package com.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.model.Book;
+import com.model.User;
 import com.repository.BookRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,7 +14,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -65,31 +68,38 @@ public class BookControllerTest {
 
     @Test
     public void getBook() throws Exception {
-        uri += "/1";
         MvcResult mvcResult1 = this.mockMvc
-                .perform(get(uri)
+                .perform(get(uri + "/1")
                         .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
 
         assertEquals(200, mvcResult1.getResponse().getStatus());
         Book book = objectMapper.readValue(mvcResult1.getResponse().getContentAsString(), Book.class);
         assertEquals(bookRepository.findById(1L).get(), book);
+
+
+        long nextIndex = bookRepository.findAll().size() + 1;
+        assertTrue(bookRepository.findById(nextIndex).isEmpty());
+        mvcResult1 = this.mockMvc
+                .perform(get(uri + "/" + nextIndex)
+                        .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andReturn();
+        assertEquals(200, mvcResult1.getResponse().getStatus());
+        assertTrue(mvcResult1.getResponse().getContentAsString().isEmpty());
     }
 
     @Test
     public void addBook() throws Exception {
-        uri += "/new";
         Book book = new Book("Test Book", "Book Author", "Book Image", 3.3, 1234,
                 "Book Description", 14.56, 22);
         MvcResult mvcResult1 = this.mockMvc
-                .perform(post(uri)
+                .perform(post(uri + "/new")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(book)))
                 .andReturn();
 
         assertEquals(200, mvcResult1.getResponse().getStatus());
         assertTrue(bookRepository.findByName("Test Book").stream().count() > 0);
-        assertFalse(bookRepository.findByName("Test 123").stream().count() > 0);
     }
 
     @Test

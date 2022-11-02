@@ -5,7 +5,7 @@ import com.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Set;
 import java.util.Optional;
 
 @RestController
@@ -16,7 +16,7 @@ public class BookController {
     private BookService bookService;
 
     @GetMapping("/all")
-    public List<Book> getAllBooks() {
+    public Set<Book> getAllBooks() {
         return bookService.getAllBooks();
     }
 
