@@ -1,13 +1,7 @@
 package com.config;
 
-import com.model.Book;
-import com.model.Cart;
-import com.model.Role;
-import com.model.User;
-import com.repository.BookRepository;
-import com.repository.CartRepository;
-import com.repository.RoleRepository;
-import com.repository.UserRepository;
+import com.model.*;
+import com.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -99,11 +93,25 @@ public class DataConfig {
     @Bean
     public CommandLineRunner cartData(CartRepository cartRepo, UserRepository userRepo, BookRepository bookRepo) {
         return args -> {
-            User user = userRepo.findById(1L).get();
-            Book book = bookRepo.findById(1L).get();
+            User user = userRepo.findById(1L).orElse(null);
+            Book book = bookRepo.findById(1L).orElse(null);
             Set<Book> books = new HashSet<>();
             books.add(book);
             cartRepo.save(new Cart(1L, user, books));
         };
     }
+
+    @Bean
+    public CommandLineRunner orderData(UserRepository userRepo, BookRepository bookRepo, OrderRepository orderRepo) {
+        return args -> {
+            User user = userRepo.findById(1L).orElse(null);
+            Book book = bookRepo.findById(1L).orElse(null);
+            Set<Book> books = new HashSet<>();
+            books.add(book);
+            Order order = new Order(user, books, "123456789", 33.60, "2020-11-02",
+                    "Mars", "pending");
+            orderRepo.save(order);
+        };
+    }
+
 }
