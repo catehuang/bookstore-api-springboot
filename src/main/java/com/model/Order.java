@@ -2,7 +2,8 @@ package com.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "order")
@@ -14,12 +15,12 @@ public class Order implements Serializable {
     @Column(name = "id")
     private long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User owner;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    @Column(name = "payment")
-    private String payment;
+    @Column(name = "payment_id")
+    private String paymentId;
 
     @Column(name = "amount")
     private double amount;
@@ -30,41 +31,36 @@ public class Order implements Serializable {
     @Column(name = "address")
     private String address;
 
-    @Column(name = "status")
-    private String status;
+    @Column(name = "payment_status")
+    private String paymentStatus;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "order_set",
-            joinColumns = @JoinColumn(name = "order_id"),
-            inverseJoinColumns = @JoinColumn(name = "book_id")
-    )
-    private List<Book> bookList;
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<Book> bookSet;
 
     public Order() {
     }
 
-    public Order(User owner, List<Book> bookList, String payment, double amount, String created,
-                 String address, String status) {
-        this.owner = owner;
-        this.bookList = bookList;
-        this.payment = payment;
+    public Order(User user, Set<Book> bookSet, String paymentId, double amount, String created,
+                 String address, String paymentStatus) {
+        this.user = user;
+        this.bookSet = bookSet;
+        this.paymentId = paymentId;
         this.amount = amount;
         this.created = created;
         this.address = address;
-        this.status = status;
+        this.paymentStatus = paymentStatus;
     }
 
-    public Order(long id, User owner, List<Book> bookList, String payment, double amount,
-                 String created, String address, String status) {
+    public Order(long id, User user, Set<Book> bookSet, String paymentId, double amount,
+                 String created, String address, String paymentStatus) {
         this.id = id;
-        this.owner = owner;
-        this.bookList = bookList;
-        this.payment = payment;
+        this.user = user;
+        this.bookSet = bookSet;
+        this.paymentId = paymentId;
         this.amount = amount;
         this.created = created;
         this.address = address;
-        this.status = status;
+        this.paymentStatus = paymentStatus;
     }
 
     public long getId() {
@@ -75,28 +71,28 @@ public class Order implements Serializable {
         this.id = id;
     }
 
-    public User getOwner() {
-        return owner;
+    public User getUser() {
+        return user;
     }
 
-    public void setOwner(User owner) {
-        this.owner = owner;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public List<Book> getBookList() {
-        return bookList;
+    public Set<Book> getBookSet() {
+        return bookSet;
     }
 
-    public void setBookList(List<Book> bookList) {
-        this.bookList = bookList;
+    public void setBookSet(Set<Book> bookSet) {
+        this.bookSet = bookSet;
     }
 
-    public String getPayment_id() {
-        return payment;
+    public String getPaymentStatus() {
+        return paymentStatus;
     }
 
-    public void setPayment_id(String payment) {
-        this.payment = payment;
+    public void setPaymentStatus(String paymentStatus) {
+        this.paymentStatus = paymentStatus;
     }
 
     public double getAmount() {
@@ -123,11 +119,24 @@ public class Order implements Serializable {
         this.address = address;
     }
 
-    public String getStatus() {
-        return status;
+    public String getPaymentId() {
+        return paymentId;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setPaymentId(String paymentId) {
+        this.paymentId = paymentId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Order order = (Order) o;
+        return id == order.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

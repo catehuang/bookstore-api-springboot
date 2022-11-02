@@ -5,20 +5,22 @@ import com.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class OrderService {
     @Autowired
     private OrderRepository orderRepository;
 
-    public List<Order> getAllOrders() {
-        return orderRepository.findAll();
+    public Set<Order> getAllOrders() {
+        return new HashSet<Order>(orderRepository.findAll());
     }
 
-    public Optional<Order> getOrder(long id) {
-        return orderRepository.findById(id);
+    public Order getOrder(long id) {
+        return orderRepository.findById(id).orElse(null);
     }
 
     public void addOrder(Order order) {
@@ -32,5 +34,9 @@ public class OrderService {
 
     public void deleteOrder(long id) {
         orderRepository.deleteById(id);
+    }
+
+    public Set<Order> getOrdersByUserId(long userId) {
+        return new HashSet<Order>(orderRepository.findAllByUserId(userId));
     }
 }

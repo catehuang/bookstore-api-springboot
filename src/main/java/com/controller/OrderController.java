@@ -5,8 +5,9 @@ import com.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Set;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -15,17 +16,22 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    @GetMapping("")
-    public List<Order> getAllOrders() {
+    @GetMapping("/all")
+    public Set<Order> getAllOrders() {
         return orderService.getAllOrders();
     }
 
     @GetMapping("/{id}")
-    public Optional<Order> getOrder(@PathVariable String id) {
+    public Order getOrder(@PathVariable String id) {
         return orderService.getOrder(Long.parseLong(id));
     }
 
-    @PostMapping("")
+    @GetMapping("/find/{userId}")
+    public Set<Order> getOrdersByUserId(@PathVariable String userId) {
+        return orderService.getOrdersByUserId(Long.parseLong(userId));
+    }
+
+    @PostMapping("/new")
     public void addOrder(@RequestBody Order order) {
         orderService.addOrder(order);
     }
