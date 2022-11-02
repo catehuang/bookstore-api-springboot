@@ -1,9 +1,11 @@
 package com;
 
 import com.model.Book;
+import com.model.Cart;
 import com.model.Role;
 import com.model.User;
 import com.repository.BookRepository;
+import com.repository.CartRepository;
 import com.repository.RoleRepository;
 import com.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -11,6 +13,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -33,9 +36,9 @@ public class ECommerceApplication {
     public CommandLineRunner userData(UserRepository userRepo) {
         return args -> {
             userRepo.save(new User("test", "test@exmaple.com", "password",
-					new Role("user")));
+                    new Role("user")));
             userRepo.save(new User("admin", "admin@exmaple.com", "password",
-					new Role("admin")));
+                    new Role("admin")));
         };
     }
 
@@ -96,6 +99,17 @@ public class ECommerceApplication {
                     15.61,
                     9
             ));
+        };
+    }
+
+    @Bean
+    public CommandLineRunner cartData(CartRepository cartRepo, UserRepository userRepo, BookRepository bookRepo) {
+        return args -> {
+            User user = userRepo.findById(1L).get();
+            Book book = bookRepo.findById(1L).get();
+            List<Book> books = new ArrayList<>();
+            books.add(book);
+            cartRepo.save(new Cart(1L, user, books));
         };
     }
 }
