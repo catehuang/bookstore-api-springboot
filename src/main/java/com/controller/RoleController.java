@@ -5,7 +5,7 @@ import com.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Set;
 import java.util.Optional;
 
 @RestController
@@ -16,7 +16,7 @@ public class RoleController {
     private RoleService roleService;
 
     @GetMapping("/all")
-    public List<Role> getAllRoles() {
+    public Set<Role> getAllRoles() {
         return roleService.getAllRoles();
     }
 
