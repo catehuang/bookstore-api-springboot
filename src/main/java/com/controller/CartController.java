@@ -6,7 +6,7 @@ import com.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Set;
 import java.util.Optional;
 
 @RestController
@@ -17,18 +17,18 @@ public class CartController {
     private CartService cartService;
 
     @GetMapping("/all")
-    public List<Cart> getAllCarts() {
+    public Set<Cart> getAllCarts() {
         return cartService.getAllCarts();
     }
 
     @GetMapping("/find/{userId}")
     public Cart getCartByUserId(@PathVariable String userId) {
-        return cartService.getCartByUserId(Long.parseLong(userId)).orElse(null);
+        return cartService.getCartByUserId(Long.parseLong(userId));
     }
 
     @GetMapping("/{cartId}")
     public Cart getCart(@PathVariable String cartId) {
-        return cartService.getCart(Long.parseLong(cartId)).orElse(null);
+        return cartService.getCart(Long.parseLong(cartId));
     }
 
     @PostMapping("/new")
