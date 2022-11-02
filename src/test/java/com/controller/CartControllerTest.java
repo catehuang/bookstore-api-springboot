@@ -16,9 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -125,7 +123,7 @@ class CartControllerTest {
     public void updateCart() throws Exception {
         uri += "/1";
         Book book = bookRepository.findById(2L).get();
-        List<Book> books = new ArrayList<>();
+        Set<Book> books = new HashSet<>();
         books.add(bookRepository.findById(2L).get());
         User user = userRepository.findById(1L).get();
         Cart cart = new Cart(user, books);
@@ -137,7 +135,8 @@ class CartControllerTest {
                 .andReturn();
 
         assertEquals(200, mvcResult1.getResponse().getStatus());
-        assertTrue(cartRepository.findByUserId(1L).get().getBookList().get(0).getId() == 2L);
+        assertTrue(cartRepository.findByUserId(1L).get().getBookSet().
+                stream().findFirst().get().getId() == book.getId());
     }
 
     @Test

@@ -2,8 +2,8 @@ package com.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "cart")
@@ -16,33 +16,28 @@ public class Cart implements Serializable {
     private long id;
 
     @OneToOne
-    @JoinColumn(name = "user_id", unique = true) //insert a foreign key user_id corresponding to user's id
+    @JoinColumn(name = "user_id", unique = true)
     private User user;
-
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "book_set",
-            joinColumns = @JoinColumn(name = "cart_id"),
-            inverseJoinColumns = @JoinColumn(name = "book_id")
-    )
-    private List<Book> bookList;
+    
+    @ElementCollection(targetClass=Book.class, fetch = FetchType.EAGER)
+    private Set<Book> bookSet;
 
     public Cart() {
     }
 
-    public Cart(long id, User user, List<Book> bookList) {
+    public Cart(long id, User user, Set<Book> bookSet) {
         this.id = id;
         this.user = user;
-        this.bookList = bookList;
+        this.bookSet = bookSet;
     }
 
-    public Cart(User user, List<Book> bookList) {
+    public Cart(User user, Set<Book> bookSet) {
         this.user = user;
-        this.bookList = bookList;
+        this.bookSet = bookSet;
     }
 
-    public Cart(List<Book> bookList) {
-        this.bookList = bookList;
+    public Cart(Set<Book> bookSet) {
+        this.bookSet = bookSet;
     }
 
     public Cart(User user) {
@@ -65,12 +60,12 @@ public class Cart implements Serializable {
         this.user = user;
     }
 
-    public List<Book> getBookList() {
-        return bookList;
+    public Set<Book> getBookSet() {
+        return bookSet;
     }
 
-    public void setBookList(List<Book> bookList) {
-        this.bookList = bookList;
+    public void setBookSet(Set<Book> bookSet) {
+        this.bookSet = bookSet;
     }
 
     @Override
